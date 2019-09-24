@@ -1,0 +1,181 @@
+.outside {
+    background: $color-primary;
+    min-height: 100vh;
+    display: block;
+    letter-spacing: .2em;
+    font-size: 13px;
+    position: relative;
+
+    &__form {
+        width: 96%;
+        max-width: 450px;
+        padding: 70px 100px;
+
+        &__message {
+            margin-bottom: 30px;
+            color: red;
+        }
+        &__submit {
+            margin-top: 50px;
+            display: block;
+        }
+
+        h1 {
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            color: white;
+            font-size: 50px;
+            letter-spacing: .25em;
+        }
+
+        input {
+            width: 100%;
+            background: transparent;
+            border: solid 4px white;
+            color: white;
+            font-size: 16px;
+            box-sizing: border-box;
+            padding: 20px;
+            margin-bottom: 15px;
+            outline: 0;
+            letter-spacing: .15em;
+
+            &::placeholder { color: rgba(white, .2); }
+            &::-webkit-input-placeholder { color: rgba(white, .2); }
+            &::-moz-placeholder { color: rgba(white, .2); }
+            &::-ms-placeholder { color: rgba(white, .2); }
+        }
+
+        label {
+            width: 100%;
+            color: white;
+            display: block;
+            font-size: 13px;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            cursor: pointer;
+            position: relative;
+            margin-bottom: 15px;
+
+            input {
+                width: auto;
+                opacity: 0;
+                position: absolute;
+                left: 0;
+                top: 0;
+
+                & + span {
+                    display: inline-block;
+                    width: 18px;
+                    height: 18px;
+                    background: transparent;
+                    border: solid 3px white;
+                    position: relative;
+                    z-index: 10;
+                    transform: translateY(7px);
+                    margin-right: 10px;
+
+                    &:before,
+                    &:after {
+                        content: '';
+                        position: absolute;
+                        width: 2px;
+                        height: 4px;
+                        background: $color-primary;
+                        left: 50%;
+                        top: 50%;
+                        transform: translate(-50%, -58%) rotate(-40deg);
+                        margin-left: -3px;
+                        margin-top: 2px;
+                    }
+                    &:after {
+                        height: 10px;
+                        transform: translate(-50%, -58%) rotate(40deg);
+                        margin-left: 1px;
+                        margin-top: 1px;
+                    }
+                }
+
+                &:checked {
+                    & + span {
+                        background: white;
+                    }
+                }
+            }
+        }
+
+
+    }
+
+    .logo {
+        width: 70px;
+        margin-bottom: 170px;
+    }
+
+    .button {
+        cursor: pointer;
+        background: white;
+        color: $color-primary;
+        display: inline-block;
+        padding: 18px;
+        text-transform: uppercase;
+        font-size: 12px;
+        letter-spacing: .2em;
+        min-width: 150px;
+        text-align: center;
+        text-indent: .1em;
+        border: solid 4px white;
+
+        transition: all .25s ease;
+
+        &:hover {
+            background: $color-primary;
+            color: white;
+        }
+    }
+
+    &__backlink {
+        color: white;
+        text-decoration: none;
+        text-transform: uppercase;
+        opacity: .2;
+        transition: all .15s ease;
+        display: block;
+        margin-bottom: 30px;
+        margin-top: -45px;
+
+        &:hover {
+            opacity: .9;
+        }
+    }
+
+    .textlink {
+        text-transform: uppercase;
+        font-size: 13px;
+        color: white;
+        letter-spacing: .2em;
+        opacity: .5;
+        position: relative;
+        cursor: pointer;
+        text-decoration: none;
+
+        &:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            width: 0;
+            height: 2px;
+            background: white;
+            transition: all .15s ease;
+        }
+
+        &:hover {
+            opacity: .9;
+
+            &:after {
+                width: calc(100% - .2em);
+            }
+        }
+    }
+}
