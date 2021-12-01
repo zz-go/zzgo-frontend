@@ -1,0 +1,128 @@
+a {
+    text-decoration: none;
+}
+
+p {
+    margin-bottom: 1em;
+    margin-top: 0;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+small {
+    @extend .copy-small;
+}
+
+@mixin headline-styles {
+    font-weight: normal;
+    font-family: $font-family;
+    margin: 0;
+}
+
+@mixin d1 {
+    @include headline-styles;
+    font-size: 38px;
+    line-height: 1.26;
+}
+
+@mixin h1 {
+    @include headline-styles;
+    font-size: 30px;
+    line-height: 1.33;
+}
+
+@mixin h2 {
+    @include headline-styles;
+    font-size: 26px;
+    line-height: 1.38;
+}
+
+@mixin h3 {
+    @include headline-styles;
+    font-size: 22px;
+    line-height: 1.45;
+}
+
+@mixin h4 {
+    @include headline-styles;
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+@mixin h5 {
+    @include headline-styles;
+    font-size: 16px;
+    line-height: 1.75;
+}
+
+@mixin h6 {
+    @include headline-styles;
+    font-size: 16px;
+    line-height: 1.75;
+}
+
+@mixin copy {
+    line-height: 1.5;
+    font-size: 16px;
+}
+
+@mixin copy-small {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+@mixin copy-big {
+    line-height: 1.56;
+    font-size: 18px;
+}
+
+.d1 {
+    @include d1;
+}
+
+.h1 {
+    @include h1;
+}
+
+.h2 {
+    @include h2;
+}
+
+.h3 {
+    @include h3;
+}
+
+.h4 {
+    @include h4;
+}
+
+.h5 {
+    @include h5;
+}
+
+.h6 {
+    @include h6;
+}
+
+.copy {
+    @include copy;
+}
+
+.copy-small {
+    @include copy-small;
+}
+
+.copy-big {
+    @include copy-big;
+}
+
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.text-center {
+    text-align: center;
+}

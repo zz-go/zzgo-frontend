@@ -1,23 +1,14 @@
-import Vue from 'vue'
-import App from './App.vue'
-import './plugins/element.js'
-import router from './router'
-import store from './store'
+import { createApp } from "vue";
 
-Vue.config.productionTip = false
+import ElementPlus from "element-plus";
+import "element-plus/dist/index.css";
 
-// navigation
-import navigation from './components/navigation.vue'
-Vue.component('navigation', navigation);
-import sidenavigation from './components/side-navigation.vue'
-Vue.component('side-navigation', sidenavigation);
+import App from "./App.vue";
+import router from "./router";
+import store from "./store";
 
-
-
-
-
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app')
+createApp(App)
+	.use(store)
+	.use(router)
+	.use(ElementPlus)
+	.mount("#app");
