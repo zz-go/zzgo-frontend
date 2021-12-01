@@ -78,6 +78,15 @@ small {
     font-size: 18px;
 }
 
+@mixin smallinfo {
+	font-size: 11px;
+	color: green;
+	text-transform: uppercase;
+	font-weight: bold;
+	letter-spacing: .1em;
+}
+
+
 .d1 {
     @include d1;
 }
@@ -125,4 +134,8 @@ small {
 
 .text-center {
     text-align: center;
+}
+
+.smallinfo {
+	@include smallinfo;
 }

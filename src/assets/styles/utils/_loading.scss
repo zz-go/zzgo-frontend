@@ -1,0 +1,16 @@
+.loading {
+	&--small {
+		height: 40px;
+
+		.el-loading-mask {
+			background: none !important;
+		}
+		.el-loading-spinner {
+			margin-top: -10px;
+		}
+		svg {
+			width: 20px !important;
+			height: 20px !important;
+		}
+	}
+}

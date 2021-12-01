@@ -1,0 +1,10 @@
+.el {
+	&-input,
+	&-select {
+		&.error {
+			.el-input__inner {
+				border-color: $color-red !important;
+			}
+		}
+	}
+}

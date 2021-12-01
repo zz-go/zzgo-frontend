@@ -1,22 +1,17 @@
 <template>
 	<div v-loading="loading" class="content">
 
-		<div class="actionbar">
-			<el-button type="danger" size="small" v-on:click="addField(1)">Cancel</el-button>
-			<el-button type="primary" size="small" v-on:click="addField(1)">Save changes</el-button>
-		</div>
-
 		<h1 class="h1">Table definition: <span v-if="tabledefinition !== false">{{ tabledefinition.attributes.name }}</span></h1>
 
-		<el-table v-if="tabledefinition !== false" :data="filteredElements" style="width: 100%">
+		<el-table v-if="tabledefinition !== false" :data="tabledefinition.relationships['sys-db-field-definitions'].data" style="width: 100%">
 			<el-table-column label="Name">
 				<template #default="scope">
-					<el-input v-model="filteredElements[scope.$index].attributes.name" />
+					<el-input :class="{ error : tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.name.trim().length < 1 }" v-model="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.name" @change="saveItem(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index)" />
 				</template>
 			</el-table-column>
 			<el-table-column label="Type">
 				<template #default="scope">
-					<el-select v-model="filteredElements[scope.$index].attributes.type" placeholder="Select Type">
+					<el-select :class="{ error : tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.type.trim().length < 1 }" v-model="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.type" placeholder="Select Type" @change="saveItem(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index)">
 						<el-option
 							v-for="item in typeOptions"
 							:key="item.value"
@@ -29,17 +24,23 @@
 			</el-table-column>
 			<el-table-column label="Default">
 				<template #default="scope">
-					<el-input v-model="filteredElements[scope.$index].attributes.default" />
+					<el-input v-model="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.default" @change="saveItem(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index)" />
 				</template>
 			</el-table-column>
 			<el-table-column label="Nullable">
 				<template #default="scope">
-					<el-checkbox v-model="filteredElements[scope.$index].attributes.nullable"></el-checkbox>
+					<el-checkbox v-model="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.nullable" @change="saveItem(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index)"></el-checkbox>
 				</template>
 			</el-table-column>
 			<el-table-column label="Unsigned">
 				<template #default="scope">
-					<el-checkbox v-if="filteredElements[scope.$index].attributes.type === 'integer'" v-model="filteredElements[scope.$index].attributes.unsigned"></el-checkbox>
+					<el-checkbox v-if="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.type === 'integer'" v-model="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.unsigned" @change="saveItem(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index)"></el-checkbox>
+				</template>
+			</el-table-column>
+			<el-table-column label="" class="savecol">
+				<template #default="scope">
+					<div v-loading="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].hasOwnProperty('loading') && tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].loading === true" class="loading--small savecol__loader">&nbsp;</div>
+					<div class="smallinfo savecol__saved">Saved</div>
 				</template>
 			</el-table-column>
 			<el-table-column label="">
@@ -47,7 +48,7 @@
 					<el-button
 						size="mini"
 						type="danger"
-						@click="deleteItem(filteredElements[scope.$index].id);">
+						@click="triggerDelete(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index);">
 						Delete
 					</el-button>
 				</template>
@@ -65,6 +66,7 @@
 
 <script>
 import * as api from '../api';
+import { ElMessageBox } from 'element-plus'
 
 export default {
   	name: "Table Definition",
@@ -88,21 +90,10 @@ export default {
 				}
 			],
 			addMultiple: 5,
-			toDeleteItems: [],
 			newIndex: []
 		}
 	},
 	computed: {
-		filteredElements() {
-			let elems = [];
-			let that = this;
-
-			this.tabledefinition.relationships['sys-db-field-definitions'].data.map(function(value) {
-				if(that.toDeleteItems.indexOf(value.id) === -1) elems.push(value);
-			});
-			
-			return elems;
-		}
 	},
 	mounted() {
 		this.id = this.$route.params.id;
@@ -140,8 +131,53 @@ export default {
 			}
 		},
 
-		deleteItem(id) {
-			this.toDeleteItems.push(id);
+		triggerDelete(id, index) {
+			let that = this;
+			ElMessageBox.confirm(
+				'Do you really want to delete this field definition?',
+				'Warning',
+				{
+					confirmButtonText: 'Yes',
+					cancelButtonText: 'No',
+					type: 'warning',
+				}
+			).then(() => {
+				that.deleteItem(id, index);
+			}).catch(() => {
+				console.log('do nothing');
+			});
+		},
+
+		async deleteItem(id, index){
+			let that = this;
+			try {
+				const response = await api.tabledefinitions.delete(id);
+				console.log(response);
+				that.tabledefinition.relationships['sys-db-field-definitions'].data.splice(index, 1);
+			} catch (error) {
+				console.error(error);
+			}
+		},
+
+		async saveItem(id, index){
+			let that = this;
+
+			var toSave = this.tabledefinition.relationships['sys-db-field-definitions'].data.filter(obj => {
+				return obj.id === id
+			});
+			toSave = toSave[0];
+
+			if(toSave.attributes.name.trim().length > 0 && toSave.attributes.type.trim().length > 0){
+				let operation = (id.indexOf('new_') === 0) ? 'create' : 'update';
+
+				try {
+					const response = await api.tabledefinitions[operation](that.tabledefinition.id, toSave.attributes);
+					that.tabledefinition.relationships['sys-db-field-definitions'].data[index] = response.data.data;
+					console.log(that.tabledefinition)
+				} catch (error) {
+					console.error(error);
+				}
+			}
 		}
 	}
 };
@@ -161,6 +197,17 @@ export default {
 		float: right;
 		width: auto;
 		margin: 0 0 0 10px;
+	}
+}
+
+.savecol {
+	&__saved {
+		display: none;
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%,-50%);
+		color:$color-green;
 	}
 }
 </style>
