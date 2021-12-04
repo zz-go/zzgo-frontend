@@ -7,5 +7,7 @@ module.exports = {
                 prependData: '\n                    @import "@/assets/styles/main.scss";\n                '
             }
         }
-    }
+    },
+
+    publicPath: '/zzgo-panel'
 };

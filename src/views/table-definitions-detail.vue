@@ -30,7 +30,12 @@
 					<el-input v-model="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.default" @change="saveItem(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index)" />
 				</template>
 			</el-table-column>
-			<el-table-column label="Nullable" class-name="text-center" width="140">
+			<el-table-column label="Index">
+				<template #default="scope">
+					<el-input v-model="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.index" @change="saveItem(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index)" />
+				</template>
+			</el-table-column>
+			<el-table-column label="Nullable" class-name="text-center" width="120">
 				<template #default="scope">
 					<el-switch
 						v-model="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.nullable"
@@ -42,7 +47,7 @@
 					/>
 				</template>
 			</el-table-column>
-			<el-table-column label="Unsigned" class-name="text-center" width="140">
+			<el-table-column label="Unsigned" class-name="text-center" width="120">
 				<template #default="scope">
 					<el-switch
 						v-if="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.type === 'integer'"
@@ -53,12 +58,6 @@
 						:inactive-value="0"
 						@change="saveItem(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index)"
 					/>
-				</template>
-			</el-table-column>
-			<el-table-column label="" class="savecol" width="100">
-				<template #default="scope">
-					<div v-loading="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].hasOwnProperty('loading') && tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].loading === true" class="loading--small savecol__loader">&nbsp;</div>
-					<div class="smallinfo savecol__saved">Saved</div>
 				</template>
 			</el-table-column>
 			<el-table-column label="" width="92">
@@ -142,7 +141,8 @@ export default {
 						name: '',
 						nullable: 0,
 						unsigned: 0,
-						type: ''
+						type: '',
+						index: ''
 					},
 					id: newIndex
 				});
@@ -191,7 +191,6 @@ export default {
 				try {
 					const response = await api.tabledefinitions[operation](that.tabledefinition.id, toSave.attributes);
 					that.tabledefinition.relationships['sys-db-field-definitions'].data[index] = response.data.data;
-					console.log(that.tabledefinition)
 				} catch (error) {
 					console.error(error);
 				}

@@ -25,5 +25,10 @@ export default {
 			type: data.type
 		};
         return zzgoApi.post(`/sys-db-table-definitions/${tabledefinition}/sys-db-field-definitions`, senddata);
+	},
+	materialize(tableid) {
+		let url = 'materialize';
+		if(typeof tableid !== 'undefined') url = 'sys-db-table-definitions/' + tableid + '/materialize'
+        return zzgoApi.post(url);
 	}
 };

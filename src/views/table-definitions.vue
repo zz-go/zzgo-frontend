@@ -7,13 +7,17 @@
 		</div>
 
 		<el-table :data="tabledefinitions" style="width: 100%">
-			<el-table-column prop="attributes.name" label="Name" />
-			<el-table-column label="Fieldcount">
+			<el-table-column label="Name">
 				<template #default="scope">
-					<span>{{ (tabledefinitions[scope.$index].relationships.hasOwnProperty('sys-db-field-definitions')) ? tabledefinitions[scope.$index].relationships['sys-db-field-definitions'].data.length : '0' }}</span>
+					<span class="ellipsis">{{ tabledefinitions[scope.$index].attributes.name }}</span>
 				</template>
 			</el-table-column>
-			<el-table-column label="Soft Deletes">
+			<el-table-column label="Fieldcount" width="140">
+				<template #default="scope">
+					<span>{{ (tabledefinitions[scope.$index].relationships.hasOwnProperty('sys-db-field-definitions')) ? tabledefinitions[scope.$index].relationships['sys-db-field-definitions'].data.length : '0' }} Fields</span>
+				</template>
+			</el-table-column>
+			<el-table-column label="Soft Deletes" class-name="text-center" width="140">
 				<template #default="scope">
 					<el-switch
 						v-model="tabledefinitions[scope.$index].attributes.use_soft_deletes"
@@ -25,7 +29,7 @@
 					/>
 				</template>
 			</el-table-column>
-			<el-table-column label="Timestamps">
+			<el-table-column label="Timestamps" class-name="text-center" width="140">
 				<template #default="scope">
 					<el-switch
 						v-model="tabledefinitions[scope.$index].attributes.use_timestamps"
@@ -37,22 +41,22 @@
 					/>
 				</template>
 			</el-table-column>
-			<el-table-column label="Created">
+			<el-table-column label="Created" width="200">
 				<template #default="scope">
 					{{ format_date(tabledefinitions[scope.$index].attributes.created_at) }}
 				</template>
 			</el-table-column>
-			<el-table-column label="Updated">
+			<el-table-column label="Updated" width="200">
 				<template #default="scope">
 					{{ format_date(tabledefinitions[scope.$index].attributes.updated_at) }}
 				</template>
 			</el-table-column>
-			<el-table-column fixed="right" label="&nbsp;" width="154">
+			<el-table-column fixed="right" label="&nbsp;" width="190">
 				<template #default="scope">
 					<el-button
 						size="mini"
 						@click="gotoItem(tabledefinitions[scope.$index].id);">
-						Edit
+						Edit Fields
 					</el-button>
 					<el-button
 						size="mini"
