@@ -2,15 +2,11 @@ import axios from 'axios';
 
 export const zzgoApi = axios.create();
 
-// if (window.location.host.indexOf('localhost') >= 0) {
-//     linklistApi.defaults.baseURL = process.env.VUE_APP_APIBASE;
-// } else {
-//     linklistApi.defaults.baseURL =
-//         window.location.protocol + '//' + window.location.host + '/api/v1/';
-// }
-
-zzgoApi.defaults.baseURL = "https://zzgo.local/zzgo/";
-
+if (window.location.host.indexOf('localhost') >= 0) {
+	zzgoApi.defaults.baseURL = "https://zzgo.local/zzgo/";
+} else {
+	zzgoApi.defaults.baseURL = "/zzgo/";
+}
 
 zzgoApi.defaults.headers.common['Accept'] =
     'application/json, text/plain, */*';
