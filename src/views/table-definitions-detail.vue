@@ -1,7 +1,10 @@
 <template>
 	<div v-loading="loading" class="content">
 
-		<h1 class="h1">Table definition: <span v-if="tabledefinition !== false">{{ tabledefinition.attributes.name }}</span></h1>
+		<div class="content__inner">
+			<p class="subline">Table definition</p>
+			<h1 class="h1"><span v-if="tabledefinition !== false">{{ tabledefinition.attributes.name }}</span>&nbsp;</h1>
+		</div>
 
 		<el-table v-if="tabledefinition !== false" :data="tabledefinition.relationships['sys-db-field-definitions'].data" style="width: 100%">
 			<el-table-column label="Name">
@@ -11,7 +14,7 @@
 			</el-table-column>
 			<el-table-column label="Type">
 				<template #default="scope">
-					<el-select :class="{ error : tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.type.trim().length < 1 }" v-model="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.type" placeholder="Select Type" @change="saveItem(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index)">
+					<el-select style="width:100%" :class="{ error : tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.type.trim().length < 1 }" v-model="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.type" placeholder="Select Type" @change="saveItem(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index)">
 						<el-option
 							v-for="item in typeOptions"
 							:key="item.value"
@@ -27,23 +30,23 @@
 					<el-input v-model="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.default" @change="saveItem(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index)" />
 				</template>
 			</el-table-column>
-			<el-table-column label="Nullable">
+			<el-table-column label="Nullable" class-name="text-center" width="140">
 				<template #default="scope">
 					<el-checkbox v-model="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.nullable" @change="saveItem(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index)"></el-checkbox>
 				</template>
 			</el-table-column>
-			<el-table-column label="Unsigned">
+			<el-table-column label="Unsigned" class-name="text-center" width="140">
 				<template #default="scope">
 					<el-checkbox v-if="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.type === 'integer'" v-model="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.unsigned" @change="saveItem(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index)"></el-checkbox>
 				</template>
 			</el-table-column>
-			<el-table-column label="" class="savecol">
+			<el-table-column label="" class="savecol" width="100">
 				<template #default="scope">
 					<div v-loading="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].hasOwnProperty('loading') && tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].loading === true" class="loading--small savecol__loader">&nbsp;</div>
 					<div class="smallinfo savecol__saved">Saved</div>
 				</template>
 			</el-table-column>
-			<el-table-column label="">
+			<el-table-column label="" width="92">
 				<template #default="scope">
 					<el-button
 						size="mini"
@@ -55,7 +58,7 @@
 			</el-table-column>
 		</el-table>
 
-		<div class="addLine">
+		<div class="content__addLine">
 			<el-button type="primary" size="mini" v-on:click="addField(1)">Add</el-button>
 			<el-button type="primary" size="mini" v-on:click="addField(addMultiple)">Add Multiple</el-button>
 			<el-input v-model="addMultiple" size="mini" />
@@ -184,22 +187,6 @@ export default {
 </script>
 
 <style lang="scss">
-.addLine {
-	padding: 20px 15px;
-	text-align: center;
-
-	input {
-		width: 40px;
-	}
-
-	> * {
-		display: inline-block;
-		float: right;
-		width: auto;
-		margin: 0 0 0 10px;
-	}
-}
-
 .savecol {
 	&__saved {
 		display: none;

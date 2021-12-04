@@ -21,16 +21,11 @@ small {
     margin: 0;
 }
 
-@mixin d1 {
-    @include headline-styles;
-    font-size: 38px;
-    line-height: 1.26;
-}
-
 @mixin h1 {
     @include headline-styles;
     font-size: 30px;
     line-height: 1.33;
+	letter-spacing: .03em;
 }
 
 @mixin h2 {
@@ -73,11 +68,6 @@ small {
     line-height: 1.5;
 }
 
-@mixin copy-big {
-    line-height: 1.56;
-    font-size: 18px;
-}
-
 @mixin smallinfo {
 	font-size: 11px;
 	color: green;
@@ -86,10 +76,14 @@ small {
 	letter-spacing: .1em;
 }
 
-
-.d1 {
-    @include d1;
+@mixin subline {
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: .2em;
+	font-weight: bold;
+	color: $color-light;
 }
+
 
 .h1 {
     @include h1;
@@ -123,19 +117,15 @@ small {
     @include copy-small;
 }
 
-.copy-big {
-    @include copy-big;
-}
-
-
-.uppercase {
-    text-transform: uppercase;
-}
 
 .text-center {
-    text-align: center;
+    text-align: center !important;
 }
 
 .smallinfo {
 	@include smallinfo;
+}
+
+.subline {
+	@include subline;
 }

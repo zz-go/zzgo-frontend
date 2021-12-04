@@ -2,5 +2,10 @@ $font-family: 'Arial';
 
 $color-purple: #010230;
 $color-grey: #eee;
+$color-light: #ccc;
 $color-green: #7db36b;
 $color-red: #e06565;
+
+:root {
+	--el-color-primary: #010230;
+}

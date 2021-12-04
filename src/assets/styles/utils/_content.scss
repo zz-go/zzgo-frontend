@@ -2,5 +2,29 @@
 	margin-left: 60px;
 	min-height: 100vh;
 	width: calc(100vw - 60px);
-	padding: 100px 50px 50px;
+	padding: 70px 50px 50px;
+
+	&__inner {
+		padding-left: 10px;
+
+		h1 {
+			margin-bottom: 40px;
+		}
+	}
+
+	&__addLine {
+		padding: 20px 15px;
+		text-align: center;
+	
+		input {
+			width: 40px;
+		}
+	
+		> * {
+			display: inline-block;
+			float: right;
+			width: auto;
+			margin: 0 0 0 10px;
+		}
+	}
 }
