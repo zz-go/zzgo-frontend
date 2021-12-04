@@ -13,8 +13,8 @@ export default {
     deleteTable(id) {
         return zzgoApi.delete(`sys-db-table-definitions/` + id);
     },
-    delete(id) {
-        return zzgoApi.delete(`sys-db-field-definitions/` + id);
+    delete(tableid, id) {
+        return zzgoApi.delete(`sys-db-table-definitions/` + tableid + `/sys-db-field-definitions/` + id);
     },
 	create(tabledefinition, data) {
 		let senddata = {

@@ -13,6 +13,30 @@
 					<span>{{ (tabledefinitions[scope.$index].relationships.hasOwnProperty('sys-db-field-definitions')) ? tabledefinitions[scope.$index].relationships['sys-db-field-definitions'].data.length : '0' }}</span>
 				</template>
 			</el-table-column>
+			<el-table-column label="Soft Deletes">
+				<template #default="scope">
+					<el-switch
+						v-model="tabledefinitions[scope.$index].attributes.use_soft_deletes"
+						active-color="#13ce66"
+						inactive-color="#ff4949"
+						:active-value="1"
+						:inactive-value="0"
+						@change="updateItem(scope.$index)"
+					/>
+				</template>
+			</el-table-column>
+			<el-table-column label="Timestamps">
+				<template #default="scope">
+					<el-switch
+						v-model="tabledefinitions[scope.$index].attributes.use_timestamps"
+						active-color="#13ce66"
+						inactive-color="#ff4949"
+						:active-value="1"
+						:inactive-value="0"
+						@change="updateItem(scope.$index)"
+					/>
+				</template>
+			</el-table-column>
 			<el-table-column label="Created">
 				<template #default="scope">
 					{{ format_date(tabledefinitions[scope.$index].attributes.created_at) }}
@@ -84,6 +108,10 @@ export default {
         	;})
 		},
 
+		updateItem(index) {
+			console.log(index,'sss')
+		},
+
 		async deleteItem(id, index) {
 			this.loading = true;
             try {
@@ -115,6 +143,8 @@ export default {
                 const response = await api.tabledefinitions.show();
 				this.tabledefinitions = response.data.data;
 				this.loading = false;
+
+				console.log(this.tabledefinitions[0].attributes.use_soft_deletes)
             } catch (error) {
                 console.error(error);
 				this.loading = false;

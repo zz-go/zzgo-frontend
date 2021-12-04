@@ -32,12 +32,27 @@
 			</el-table-column>
 			<el-table-column label="Nullable" class-name="text-center" width="140">
 				<template #default="scope">
-					<el-checkbox v-model="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.nullable" @change="saveItem(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index)"></el-checkbox>
+					<el-switch
+						v-model="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.nullable"
+						active-color="#13ce66"
+						inactive-color="#ff4949"
+						:active-value="1"
+						:inactive-value="0"
+						@change="saveItem(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index)"
+					/>
 				</template>
 			</el-table-column>
 			<el-table-column label="Unsigned" class-name="text-center" width="140">
 				<template #default="scope">
-					<el-checkbox v-if="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.type === 'integer'" v-model="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.unsigned" @change="saveItem(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index)"></el-checkbox>
+					<el-switch
+						v-if="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.type === 'integer'"
+						v-model="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.unsigned"
+						active-color="#13ce66"
+						inactive-color="#ff4949"
+						:active-value="1"
+						:inactive-value="0"
+						@change="saveItem(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index)"
+					/>
 				</template>
 			</el-table-column>
 			<el-table-column label="" class="savecol" width="100">
@@ -125,8 +140,8 @@ export default {
 					attributes: {
 						default: '',
 						name: '',
-						nullable: false,
-						unsigned: false,
+						nullable: 0,
+						unsigned: 0,
 						type: ''
 					},
 					id: newIndex
@@ -154,7 +169,7 @@ export default {
 		async deleteItem(id, index){
 			let that = this;
 			try {
-				const response = await api.tabledefinitions.delete(id);
+				const response = await api.tabledefinitions.delete(this.id, id);
 				console.log(response);
 				that.tabledefinition.relationships['sys-db-field-definitions'].data.splice(index, 1);
 			} catch (error) {
