@@ -4,8 +4,14 @@
 	width: calc(100vw - 60px);
 	padding: 70px 50px 50px;
 
+	&--subnavigation {
+		margin-left: 280px;
+		width: calc(100vw - 280px);
+	}
+
 	&__inner {
 		padding-left: 10px;
+		display: block;
 
 		h1 {
 			margin-bottom: 40px;

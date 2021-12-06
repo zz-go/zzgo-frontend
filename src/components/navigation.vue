@@ -50,6 +50,7 @@ export default {
 	height: 100vh;
 	width: 60px;
 	background: $color-purple;
+	z-index: 3;
 
 	&__logo {
 		position: absolute;

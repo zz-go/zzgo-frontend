@@ -1,0 +1,45 @@
+.tabs {
+	display: block;
+	width: 100%;
+	border-bottom: solid 1px $color-grey;
+	margin: 40px 0;
+	padding-left: 9px;
+
+	&__item {
+		display: inline-block;
+		font-size: 13px;
+		font-weight: bold;
+		color: $color-light;
+		margin: 0 2px;
+		padding: 12px 15px;
+		text-transform: uppercase;
+		letter-spacing: .08em;
+		position: relative;
+		transform: translateY(1px);
+		transition: all .2s ease;
+
+		&:hover {
+			color: $color-almost-black;
+		}
+
+		&:after {
+			content: '';
+			position: absolute;
+			left: 0;
+			bottom: 0;
+			height: 2px;
+			background: $color-purple;
+			width: 100%;
+			opacity: 0;
+			transition: all .2s ease;
+		}
+
+		&.active {
+			color: $color-purple;
+
+			&:after {
+				opacity: 1;
+			}
+		}
+	}
+}

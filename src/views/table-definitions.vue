@@ -14,7 +14,7 @@
 			</el-table-column>
 			<el-table-column label="Fieldcount" width="140">
 				<template #default="scope">
-					<span>{{ (tabledefinitions[scope.$index].relationships.hasOwnProperty('sys-db-field-definitions')) ? tabledefinitions[scope.$index].relationships['sys-db-field-definitions'].data.length : '0' }} Fields</span>
+					<span>{{ (tabledefinitions[scope.$index].relationships.hasOwnProperty('sys-db-field-definitions')) ? tabledefinitions[scope.$index].relationships['sys-db-field-definitions'].data.length : '0' }} Field<span v-if="(tabledefinitions[scope.$index].relationships.hasOwnProperty('sys-db-field-definitions') && tabledefinitions[scope.$index].relationships['sys-db-field-definitions'].data.length != 1) || !tabledefinitions[scope.$index].relationships.hasOwnProperty('sys-db-field-definitions')">s</span></span>
 				</template>
 			</el-table-column>
 			<el-table-column label="Soft Deletes" class-name="text-center" width="140">
@@ -79,15 +79,20 @@
 import * as api from '../api';
 import dateMixin from '@/mixins/dateMixin.js';
 import router from '../router';
+import { mapGetters } from 'vuex';
 
 import { ElMessageBox } from 'element-plus';
 
 export default {
 	mixins: [dateMixin],
   	name: "Table Definitions",
+    computed: {
+        ...mapGetters([
+            'tabledefinitions'
+        ]),
+	},
  	data() {
         return {
-			tabledefinitions: [],
 			loading: false
 		}
 	},
@@ -142,17 +147,12 @@ export default {
 		},
 
 		async fetchDefinitions() {
-			this.loading = true;
-            try {
-                const response = await api.tabledefinitions.show();
-				this.tabledefinitions = response.data.data;
-				this.loading = false;
+			let that = this;
+			that.loading = true;
 
-				console.log(this.tabledefinitions[0].attributes.use_soft_deletes)
-            } catch (error) {
-                console.error(error);
-				this.loading = false;
-            }
+  			this.$store.dispatch('fetchTabledefinitions').then(() => {
+   				that.loading = false;
+  			});
 		}
 	}
 };

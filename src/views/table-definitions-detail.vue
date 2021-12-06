@@ -6,76 +6,87 @@
 			<h1 class="h1"><span v-if="tabledefinition !== false">{{ tabledefinition.attributes.name }}</span>&nbsp;</h1>
 		</div>
 
-		<el-table v-if="tabledefinition !== false" :data="tabledefinition.relationships['sys-db-field-definitions'].data" style="width: 100%">
-			<el-table-column label="Name">
-				<template #default="scope">
-					<el-input :class="{ error : tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.name.trim().length < 1 }" v-model="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.name" @change="saveItem(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index)" />
-				</template>
-			</el-table-column>
-			<el-table-column label="Type">
-				<template #default="scope">
-					<el-select style="width:100%" :class="{ error : tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.type.trim().length < 1 }" v-model="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.type" placeholder="Select Type" @change="saveItem(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index)">
-						<el-option
-							v-for="item in typeOptions"
-							:key="item.value"
-							:label="item.label"
-							:value="item.value"
-						>
-						</el-option>
-					</el-select>
-				</template>
-			</el-table-column>
-			<el-table-column label="Default">
-				<template #default="scope">
-					<el-input v-model="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.default" @change="saveItem(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index)" />
-				</template>
-			</el-table-column>
-			<el-table-column label="Index">
-				<template #default="scope">
-					<el-input v-model="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.index" @change="saveItem(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index)" />
-				</template>
-			</el-table-column>
-			<el-table-column label="Nullable" class-name="text-center" width="120">
-				<template #default="scope">
-					<el-switch
-						v-model="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.nullable"
-						active-color="#13ce66"
-						inactive-color="#ff4949"
-						:active-value="1"
-						:inactive-value="0"
-						@change="saveItem(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index)"
-					/>
-				</template>
-			</el-table-column>
-			<el-table-column label="Unsigned" class-name="text-center" width="120">
-				<template #default="scope">
-					<el-switch
-						v-if="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.type === 'integer'"
-						v-model="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.unsigned"
-						active-color="#13ce66"
-						inactive-color="#ff4949"
-						:active-value="1"
-						:inactive-value="0"
-						@change="saveItem(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index)"
-					/>
-				</template>
-			</el-table-column>
-			<el-table-column label="" width="92">
-				<template #default="scope">
-					<el-button
-						size="mini"
-						type="danger"
-						@click="triggerDelete(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index);">
-						Delete
-					</el-button>
-				</template>
-			</el-table-column>
-		</el-table>
+		<div class="tabs">
+			<router-link class="tabs__item" @click="relations = false" :class="{ active : relations === false }" :to="'/table-definitions/' + id">Edit Fields</router-link>
+			<router-link class="tabs__item" @click="relations = true" :class="{ active : relations === true }" :to="'/table-definitions/' + id + '/relations'">Edit Relations</router-link>
+		</div>
 
-		<div class="content__addLine">
-			<el-button type="primary" size="mini" v-on:click="addField(1)">Add</el-button>
-			<el-button type="primary" size="mini" v-on:click="addField(addMultiple)">Add Multiple</el-button>
-			<el-input v-model="addMultiple" size="mini" />
+		<div v-if="relations === false && tabledefinition !== false">
+			<el-table :data="tabledefinition.relationships['sys-db-field-definitions'].data" style="width: 100%">
+				<el-table-column label="Name">
+					<template #default="scope">
+						<el-input :class="{ error : tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.name.trim().length < 1 }" v-model="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.name" @change="saveItem(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index)" />
+					</template>
+				</el-table-column>
+				<el-table-column label="Type">
+					<template #default="scope">
+						<el-select style="width:100%" :class="{ error : tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.type.trim().length < 1 }" v-model="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.type" placeholder="Select Type" @change="saveItem(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index)">
+							<el-option
+								v-for="item in typeOptions"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value"
+							>
+							</el-option>
+						</el-select>
+					</template>
+				</el-table-column>
+				<el-table-column label="Default">
+					<template #default="scope">
+						<el-input v-model="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.default" @change="saveItem(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index)" />
+					</template>
+				</el-table-column>
+				<el-table-column label="Index">
+					<template #default="scope">
+						<el-input v-model="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.index" @change="saveItem(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index)" />
+					</template>
+				</el-table-column>
+				<el-table-column label="Nullable" class-name="text-center" width="120">
+					<template #default="scope">
+						<el-switch
+							v-model="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.nullable"
+							active-color="#13ce66"
+							inactive-color="#ff4949"
+							:active-value="1"
+							:inactive-value="0"
+							@change="saveItem(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index)"
+						/>
+					</template>
+				</el-table-column>
+				<el-table-column label="Unsigned" class-name="text-center" width="120">
+					<template #default="scope">
+						<el-switch
+							v-if="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.type === 'integer'"
+							v-model="tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].attributes.unsigned"
+							active-color="#13ce66"
+							inactive-color="#ff4949"
+							:active-value="1"
+							:inactive-value="0"
+							@change="saveItem(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index)"
+						/>
+					</template>
+				</el-table-column>
+				<el-table-column label="" width="92">
+					<template #default="scope">
+						<el-button
+							size="mini"
+							type="danger"
+							@click="triggerDelete(tabledefinition.relationships['sys-db-field-definitions'].data[scope.$index].id, scope.$index);">
+							Delete
+						</el-button>
+					</template>
+				</el-table-column>
+			</el-table>
+
+			<div class="content__addLine">
+				<el-button type="primary" size="mini" v-on:click="addField(1)">Add</el-button>
+				<el-button type="primary" size="mini" v-on:click="addField(addMultiple)">Add Multiple</el-button>
+				<el-input v-model="addMultiple" size="mini" />
+			</div>
+		</div>
+
+		<div v-if="relations === true && tabledefinition !== false">
+			alskfjalksdfj
 		</div>
 		
 	</div>
@@ -83,7 +94,8 @@
 
 <script>
 import * as api from '../api';
-import { ElMessageBox } from 'element-plus'
+import { ElMessageBox } from 'element-plus';
+import { mapGetters } from 'vuex';
 
 export default {
   	name: "Table Definition",
@@ -107,14 +119,22 @@ export default {
 				}
 			],
 			addMultiple: 5,
-			newIndex: []
+			newIndex: [],
+			relations: false
 		}
 	},
-	computed: {
+    computed: {
+        ...mapGetters([
+            'tabledefinitions'
+        ]),
 	},
 	mounted() {
 		this.id = this.$route.params.id;
 		this.fetchDefinition(this.id);
+
+		if(this.tabledefinitions === false || this.tabledefinitions.length < 1) this.$store.dispatch('fetchTabledefinitions')
+
+		if(this.$router.currentRoute._value.path.split('/').length > 3) this.relations = true;
 	},
 	methods: {
 		async fetchDefinition(id) {
