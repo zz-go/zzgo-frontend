@@ -155,10 +155,14 @@ export default {
 
     async updateItem(index, key) {
       this.loading = true;
+
+      let senddata = {};
+      senddata[key] = this.tabledefinitions[index].attributes[key];
+
       try {
         await api.tabledefinitions.updateTable(
           this.tabledefinitions[index].id,
-          this.tabledefinitions[index].attributes[key]
+          senddata
         );
         this.loading = false;
       } catch (error) {

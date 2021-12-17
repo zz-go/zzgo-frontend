@@ -37,7 +37,8 @@ export default {
 			name: data.name,
 			nullable: data.nullable,
 			unsigned: data.unsigned,
-			type: data.type
+			type: data.type,
+			index: data.index
 		};
         return zzgoApi.put(`/sys-db-table-definitions/${tabledefinition}/sys-db-field-definitions/${fielddefinition}/`, senddata);
 	},
