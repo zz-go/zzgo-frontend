@@ -245,17 +245,27 @@ export default {
   computed: {
     ...mapGetters(["tabledefinitions"]),
   },
+  watch: {
+    "$route.params.id": function () {
+      this.initDefinition();
+    },
+  },
   mounted() {
-    this.id = this.$route.params.id;
-    this.fetchDefinition(this.id);
+    this.initDefinition();
 
     if (this.tabledefinitions === false || this.tabledefinitions.length < 1)
       this.$store.dispatch("fetchTabledefinitions");
-
-    if (this.$router.currentRoute._value.path.split("/").length > 3)
-      this.relations = true;
   },
   methods: {
+    initDefinition() {
+      this.loading = true;
+      this.id = this.$route.params.id;
+      this.fetchDefinition(this.id);
+
+      if (this.$router.currentRoute._value.path.split("/").length > 3)
+        this.relations = true;
+    },
+
     async fetchDefinition(id) {
       try {
         const response = await api.tabledefinitions.get(id);
