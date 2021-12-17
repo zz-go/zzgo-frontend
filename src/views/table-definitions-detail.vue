@@ -7,6 +7,9 @@
           tabledefinition.attributes.name
         }}</span
         >&nbsp;
+        <span class="materialize" @click="triggerMaterialize(id)"
+          >Materialize</span
+        >
       </h1>
     </div>
 
@@ -362,6 +365,34 @@ export default {
         }
       }
     },
+
+    triggerMaterialize(id) {
+      let that = this;
+      ElMessageBox.confirm(
+        "Do you really want to materialize this table definition?",
+        "Warning",
+        {
+          confirmButtonText: "Yes",
+          cancelButtonText: "No",
+          type: "warning",
+        }
+      )
+        .then(() => {
+          that.materialize(id);
+        })
+        .catch(() => {
+          console.log("do nothing");
+        });
+    },
+    async materialize(id) {
+      try {
+        const response = await api.tabledefinitions.materialize(id);
+        console.log(response);
+        console.log("materialize successful");
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
 };
 </script>
@@ -375,6 +406,27 @@ export default {
     top: 50%;
     transform: translate(-50%, -50%);
     color: $color-green;
+  }
+}
+.materialize {
+  text-transform: uppercase;
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  border: solid 2px $color-purple;
+  color: $color-purple;
+  padding: 3px 3px 3px 4px;
+  border-radius: 4px;
+  opacity: 0.4;
+  cursor: pointer;
+  transform: translateY(-5px);
+  display: inline-block;
+  transition: all 0.25s ease;
+
+  &:hover {
+    opacity: 1;
+    background: $color-purple;
+    color: white;
   }
 }
 </style>

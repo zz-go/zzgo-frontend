@@ -21,6 +21,7 @@
           </router-link>
         </el-tooltip>
       </li>
+      <!--
       <li>
         <el-tooltip content="Materialize" placement="right">
           <span @click="materialize()">
@@ -37,6 +38,7 @@
           </span>
         </el-tooltip>
       </li>
+	  -->
     </ul>
   </div>
 </template>
